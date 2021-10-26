@@ -36,17 +36,17 @@ For example:
 
 ```
 2. Add your character images to `site\img\chars`. 
-    1. Directly in the folder there should be each image with `{{character id}}.png`.
-        1. These are 80x100 images used in the search result list and editor match list.
-    1. In `site\img\chars\big` full sized character images should be added. 
-        1. They show up as background in the characters page. Name should match the id.
+    1. Directly in the folder there should be each image with `{{character id}}.png`.\
+       These are 80x100 images used in the search result list and editor match list.
+    1. In `site\img\chars\big` full sized character images should be added.\
+       They show up as background in the characters page. Name should match the id.
 3. Create logos for each character in site\img\logos.
     1. Logos are 220x56 images. Each character should have their logo.\
         Server randomly shows them each refresh.
     1. Name is important: `logo_{{character id}}.png`.
 4. Clean contents of `data\match.data`. These are not for your game (Don't delete the file though).
 
-And thats it. You can run this, and it shouldn't break. If problems, check FAQ in the website on how to contact Eika.\
+And that's it. You can run this, and it shouldn't break. If problems, check FAQ in the website on how to contact Eika.\
 However, at this point you will not have any matches yet of your game.
 
 ## Adding matches
@@ -79,8 +79,8 @@ You will then be able to approve it or delete it.
 There is some logging going on when matches are added/edited/deleted.\
 Log file can be found in `data\log-{{DATE}}.data`. This will automatically create a new log file each month of the year.
 
-There are also report file in `data\reports.data`.\
-These are info from users on incorrect matches. What if wrong winner was set, or some character is wrong. Stuff like that.\
+There is also report file in `data\reports.data`.\
+This one has info from users on incorrect matches. E.g. if a wrong winner was set, or some character is incorrect.\
 Useful to peek and fix some matches once in a while.
 
 ## Backend structure
