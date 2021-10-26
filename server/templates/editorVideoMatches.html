@@ -1,0 +1,31 @@
+<%
+let videoData = server.games[vid];
+
+if(!videoData || videoData.matches.length === 0) {
+	print("<h2 class='ms-text-center py-4 shadow'>No matches on this video yet.</h2>");
+} else {
+%>
+	<table id="ResultsTable" class="result-table ms-table">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Matchup details</th>
+				<th>Go to</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+
+			for(let i = videoData.matches.length - 1; i >= 0; i--) {
+				print(server.templateManager.renderTemplate("match_row_editor.html", {
+					match: videoData.matches[i]
+				}));
+			}
+			%>
+		</tbody>
+	</table>
+<%
+}
+%>

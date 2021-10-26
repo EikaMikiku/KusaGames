@@ -1,0 +1,37 @@
+<div class="ms-menu">
+	<div class="ms-menu-logo m-0">
+		<a href="/"><img src="img/logos/logo_<%=server.getRandomCharId()%>.png" alt="Logo"/></a>
+	</div>
+	<nav class="ms-menu-link float-right">
+		<ul>
+			<a target="_blank" href="https://twitter.com/Melty_Games">
+				<img src="img/twitter.webp" alt="Twitter updates">
+			</a>
+			<a target="_blank" href="https://www.buymeacoffee.com/meltygames">
+				<img class="menu-img-shadow" src="img/bmc.png" alt="Buy me a coffee">
+			</a>
+			<a target="_blank" href="https://www.patreon.com/meltygames">
+				<img src="img/patreon.png" alt="Become a patron">
+			</a>
+		</ul>
+	</nav>
+	<nav class="ms-menu-link">
+		<input type="checkbox" id="ms-menu-toggle">
+
+		<label for="ms-menu-toggle" class="ms-menu-icon">
+			<div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div>
+		</label>
+		<ul>
+			<a href="/characters"><li>Characters</li></a>
+			<a href="/statistics"><li>Statistics</li></a>
+			<a href="/editor"><li>Editor</li></a>
+			<div class="menu-dropdown">
+				<label>Other</label>
+				<div class="menu-dropdown-content">
+					<a href="/contributors"><li>Contributors</li></a>
+					<a href="/faq"><li>FAQ</li></a>
+				</div>
+			</div>
+		</ul>
+	</nav>
+</div>

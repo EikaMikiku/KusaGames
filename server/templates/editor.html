@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<%=server.templateManager.renderTemplate("head.html", {
+		title: "Kusa.Games: Editor",
+		description: "Editor page to add new matches."
+	})%>
+	<script src="js/editor.js"></script>
+	<script defer src="https://www.youtube.com/iframe_api"></script>
+	<link rel="stylesheet" type="text/css" href="css/editor.css">
+	<body>
+		<%=server.templateManager.renderTemplate("menu.html")%>
+		<%
+		let playerNames = server.statisticsManager.getPlayerNames();
+		let videoTags = server.statisticsManager.getVideoTags();
+		%>
+		<div id="PlayerLoaderForm" class="container">
+			<div class="row justify-content-center">
+				<div class="col-8 ms-text-center">
+					<p>
+						<%
+						if(auth) {
+							print("You have a valid token set.");
+						} else {
+							print("You have no token set.");
+						}
+						%>
+						<br>
+						<%
+						if(!auth) {
+							print("Your video will be saved as provisional until approved by the team.<br>");
+							print("Ask <a href='/faq'>Eika</a> for token if you plan to frequently add matches.<br>");
+						} else if(canApprove) {
+							print("<a href='/provisional'>Check and maybe approve some provisional videos?</a><br>");
+						}
+						%>
+						<button id="EnterTokenButton"><%=auth?'Update':'Enter'%> token</button>
+					</p>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-4">
+					<input id="VideoURLInput" class="input" type="text" placeholder="Paste YouTube video URL here">
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-4">
+					<button id="PlayerLoadButton" class="ms-btn ms-info ms-fullwidth ms-medium">Load</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="EditorGuide" class="container">
+			<div class="ms-browser">
+				<div class="ms-tab-browser ms-text-right">
+					<span>__</span>
+					<span>▢</span>
+					<span>✕</span>
+				</div>
+				<div class="ms-content">
+					<p class="ms-text-center">
+						<h5 class="shadow ms-text-center">Don't let your hard work be discarded!</h5>
+						<br>
+						<h6 class="shadow ms-text-center">Read the information below on how to properly add matches!</h6>
+					</p>
+					<br>
+					How to use:
+					<ol>
+						<li>Load the YouTube video.</li>
+						<li>Populate video details such as date, netplay, appropriate tags.</li>
+						<li>Match start point is when the characters are able to move. BE PRECISE to the second. It sucks to wait until the match starts when searching matches.</li>
+						<li>Once you get to the match's start point, you MUST refresh the editor time by clicking the "Refresh time" button. This will set the editor time of when the match starts.</li>
+						<li>Populate the match's details. Player characters, and names if possible.</li>
+						<li>Since the match start time is saved, you are then free to scroll forward in the match and find the result of that match.</li>
+						<li>Once you know the result, set the winner of the match, and click Add @ time button.</li>
+						<li>Note that when you add a match, the video information is also going to be updated.</li>
+						<li>Use the char+player list on the top left (It will appear once you add an entry with a player name). It's a list of all unique characters+player pair. Clicking P1 or P2 will add that player with that character to the respective form. This simplifies adding player names and removes risks of typos.</li>
+					</ol>
+					<br>
+					Guidance:
+					<ul>
+						<li>One match = one entry in the editor. Don't just put a start of each set in the video, every match counts.</li>
+						<li>Make sure you pick the right characters.</li>
+						<li>Only add player names when you are sure.</li>
+						<li>Japanese, or any other non-english player names should be written in the form of <kbd class="">romaji (native)</kbd>. There are some japanese names in the DB, see for yourself.</li>
+						<li>If most matches in the video are from netplay, mark it as netplay.</li>
+						<li>Date of the video is when matches were played (if known). If not known, set it to the video's upload date.</li>
+						<li>Do not include player names or character names in the tags, as those can be specifically searched for.</li>
+						<li>Be careful when using the char+player list. Make sure the character is correct. Some players might use multiple characters.</li>
+						<li>If still unsure, try pasting video URL that is already in the database. This will show you all matches in that video.</li>
+						<li>If still unsure, ask Eika. Contact details are in the FAQ page.</li>
+					</ul>
+					<br>
+					Tips:
+					<ul>
+						<li>Use YouTube's seek preview to find when match starts and ends.</li>
+						<li>Best to close YouTube's "More videos" panel in the player. Only need to do this once. It gets in the way.</li>
+						<li><kbd class="">Ctrl + Shift</kbd> shortcut refreshes time. This only works when player is not "focused". Use buttons below the player to not click and focus on the player.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div id="VideoDataForm" class="container" hidden>
+			<div class="row">
+				<div class="col-md-4 col-lg-2 offset-lg-2">
+					<div class="ms-form-group">
+						<label><b>VIDEO DATE</b></label>
+						<input id="VideoDate" type="date">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="ms-form-group">
+						<label><b>VIDEO TAGS</b></label>
+						<input id="VideoTags" type="text" placeholder="Tag1|Tag2|Tag3" list="tag-list">
+						<datalist id="tag-list">
+							<%
+								for(let tag of videoTags) {
+									print("<option value='" + tag + "'>");
+								}
+							%>
+						</datalist>
+					</div>
+				</div>
+				<div class="col-md-4 col-lg-2">
+					<div class="ms-form-group">
+						<label><b>VIDEO TYPE</b></label>
+						<span class="select">
+							<select id="NetplaySelect">
+								<option value="">Locals or Netplay?</option>
+								<option value="L">Locals (offline)</option>
+								<option value="N">Netplay</option>
+							</select>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-4">
+					<div class="ms-form-group">
+						<button id="UpdateVideoDataButton" class="ms-btn ms-info ms-fullwidth">Update video data only</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="PlayerTip"></div>
+
+		<div class="container xlg d-flex justify-content-center">
+			<div id="YoutubePlayer"></div>
+		</div>
+
+		<div id="NewMatchForm" class="container xlg" hidden>
+			<div class="row justify-content-center">
+				<div class="col-sm">
+					<button data-timeshift="-37" class="ms-btn ms-info ms-fullwidth timechange-button">-37s</button>
+				</div>
+				<div class="col-sm">
+					<button data-timeshift="-19" class="ms-btn ms-info ms-fullwidth timechange-button">-19s</button>
+				</div>
+				<div class="col-sm">
+					<button data-timeshift="-7" class="ms-btn ms-info ms-fullwidth timechange-button">-7s</button>
+				</div>
+				<div class="col-sm">
+					<button data-timeshift="-1" class="ms-btn ms-info ms-fullwidth timechange-button">-1s</button>
+				</div>
+				<div class="col-sm">
+					<button id="PlayPauseButton" class="ms-btn ms-info ms-fullwidth">Play/Pause</button>
+				</div>
+				<div class="col-sm">
+					<button data-timeshift="1" class="ms-btn ms-info ms-fullwidth timechange-button">+1s</button>
+				</div>
+				<div class="col-sm">
+					<button data-timeshift="7" class="ms-btn ms-info ms-fullwidth timechange-button">+7s</button>
+				</div>
+				<div class="col-sm">
+					<button data-timeshift="19" class="ms-btn ms-info ms-fullwidth timechange-button">+19s</button>
+				</div>
+				<div class="col-sm">
+					<button data-timeshift="37" class="ms-btn ms-info ms-fullwidth timechange-button">+37s</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<div class="ms-form-group">
+						<label><b>PLAYER 1</b></label>
+						<span class="select">
+							<select id="P1Char">
+								<option value="">Select character</option>
+								<%
+								for(let char in server.charMap) {
+									%>
+									<option value="<%=char%>"><%=server.charMap[char].name%></option>
+									<%
+								}
+								%>
+							</select>
+						</span>
+					</div>
+					<div class="ms-form-group">
+						<input id="P1Name" placeholder="Player 1 name" list="p1name-list">
+						<datalist id="p1name-list">
+							<%
+								for(let name of playerNames) {
+									print("<option value='" + name + "'>");
+								}
+							%>
+						</datalist>
+					</div>
+				</div>
+				<div class="col-sm">
+					<div class="ms-form-group">
+						<label><b>PLAYER 2</b></label>
+						<span class="select">
+							<select id="P2Char">
+								<option value="">Select character</option>
+								<%
+								for(let char in server.charMap) {
+									%>
+									<option value="<%=char%>"><%=server.charMap[char].name%></option>
+									<%
+								}
+								%>
+							</select>
+						</span>
+					</div>
+					<div class="ms-form-group">
+						<input id="P2Name" placeholder="Player 2 name" list="p2name-list">
+						<datalist id="p2name-list">
+							<%
+								for(let name of playerNames) {
+									print("<option value='" + name + "'>");
+								}
+							%>
+						</datalist>
+					</div>
+				</div>
+				<div class="col-sm">
+					<div class="ms-form-group">
+						<label><b>RESULT</b></label>
+						<span class="select">
+							<select id="WinnerSelect">
+								<option value="">Select winner</option>
+								<option value="1">Player 1</option>
+								<option value="2">Player 2</option>
+								<option value="D">Draw</option>
+							</select>
+						</span>
+					</div>
+					<div class="ms-form-group">
+						<button id="ActionButton" data-time="0s" class="ms-btn ms-info ms-fullwidth">Add</button>
+					</div>
+				</div>
+				<div class="col-sm">
+					<div class="ms-form-group">
+						<label><b>&nbsp;</b></label>
+						<button id="TimeRefreshButton" class="ms-btn ms-info ms-fullwidth">Refresh time</button>
+					</div>
+					<div class="ms-form-group" id="CancelEditContainer" hidden>
+						<button id="CancelEditButton" hidden class="ms-btn ms-outline-danger ms-fullwidth">Cancel edit mode</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="ResultsList" class="container xlg" hidden>
+			
+		</div>
+	</body>
+</html>

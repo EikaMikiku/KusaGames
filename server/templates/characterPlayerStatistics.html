@@ -1,0 +1,22 @@
+<tbody>
+	<%
+	let result = server.statisticsManager.getCharacterPlayerStats(char);
+
+	for(let i = 0; i < result.length; i++) {
+		%>
+		<tr>
+		<td><%=i + 1%></td>
+		<td><%=result[i].name%></td>
+		<td class="d-none d-md-table-cell">
+			<a target="_blank" href="/?p1char=<%=char%>&p1name=<%=result[i].name%>">View games</a>
+		</td>
+		<td><%=result[i].total%></td>
+		<td><%=result[i].wins%></td>
+		<td class="d-none d-sm-table-cell"><%=result[i].losses%></td>
+		<td class="d-none d-sm-table-cell"><%=result[i].draws%></td>
+		<td><%=(100 * result[i].winrate).toFixed(2)%>&percnt;</td>
+		</tr>
+		<%
+	}
+	%>
+</tbody>

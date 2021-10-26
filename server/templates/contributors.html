@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<%=server.templateManager.renderTemplate("head.html", {
+		title: "Kusa.Games: Contributors page",
+		description: "List of people who assist with Kusa.Games development."
+	})%>
+	<body>
+		<%=server.templateManager.renderTemplate("menu.html")%>
+		<div class="container">
+			<%
+			let list = server.cfg.contributors;
+			let itemsPerRow = 3;
+			let rows = Math.ceil(list.length / itemsPerRow);
+			for(let r = 0; r < rows; r++) {
+				%>
+				<div class="row">
+				<%
+				for(let i = 0; i < itemsPerRow; i++) {
+					let idx = r * 3 + i;
+					if(!list[idx]) break;
+					%>
+					<div class="col-lg-4 col-sm-12">
+						<div class="card">
+							<div class="card-title">
+								<h3><%=list[idx].name%></h3>
+								<div class="ms-card-content">
+									<%=list[idx].html%>
+								</div>
+							</div>
+							<div class="card-img">
+								<img src="<%=list[idx].img%>">
+							</div>
+						</div>
+					</div>
+					<%
+				}
+				%>
+				</div>
+				<%
+			}
+			%>
+		</div>
+	</body>
+</html>

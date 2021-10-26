@@ -1,0 +1,57 @@
+<%
+	let perPage = server.cfg.resultsPerPage;
+	let pages = Math.ceil(search.total / perPage);
+	let page = search.page;
+	let diff = 7;
+
+	if(page > pages) {
+		page = pages;
+	}
+
+	let startPage = page - diff;
+	if(startPage <= 0) {
+		startPage = 1;
+	}
+
+	let endPage = page + diff;
+	if(endPage >= pages) {
+		endPage = pages;
+	}
+
+	let prevDisabled = page === 1;
+	let nextDisabled = page === endPage;
+%>
+<div class="ms-pagination">
+	<ul>
+		<li>
+			<a data-page="<%=page-1%>" <%=prevDisabled?"class='ms-disabled'":""%>>Prev</a>
+		</li>
+
+		<li><a data-page="1" <%=page === 1?"class='ms-active'":""%>>1</a></li>
+
+		<% if(startPage > 1) { %>
+			<li><span>&hellip;</span></li>
+		<% } %>
+
+		<%
+			for(let i = startPage+1; i < endPage; i++) {
+				let active = page === i;
+				%>
+				<li><a data-page="<%=i%>" <%=active?"class='ms-active'":""%>><%=i%></a></li>
+				<%
+			}
+		%>
+
+		<% if(endPage < pages) { %>
+			<li><span class="pagination-ellipsis">&hellip;</span></li>
+		<% } %>
+
+		<% if(startPage !== endPage) { %>
+			<li><a data-page="<%=pages%>" <%=page === pages?"class='ms-active'":""%>><%=pages%></a></li>
+		<% } %>
+
+		<li>
+			<a data-page="<%=page+1%>" <%=nextDisabled?"class='ms-disabled'":""%>>Next</a>
+		</li>
+	</ul>
+</div>

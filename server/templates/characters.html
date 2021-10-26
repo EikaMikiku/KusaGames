@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<%=server.templateManager.renderTemplate("head.html", {
+		title: "Kusa.Games: Characters page",
+		description: "Information and statistics for Kusa characters."
+	})%>
+	<script src="js/characters.js"></script>
+	<script src="js/tableSort.js"></script>
+	<script src="js/chart.min.js"></script>
+	<body style="overflow-y: scroll;">
+		<%=server.templateManager.renderTemplate("menu.html")%>
+		<div class="container">
+			<div class="h5 ms-content ms-text-center py-4 shadow">
+				Select a character.
+			</div>
+		</div>
+		<div class="container char-select p-2">
+			<div class="char-img-wrap"><img class="char-img" src="/img/chars/c1.png" data-id="c1"></div>
+			<div class="char-img-wrap"><img class="char-img" src="/img/chars/c2.png" data-id="c2"></div>
+			<div class="char-img-wrap"><img class="char-img" src="/img/chars/c3.png" data-id="c3"></div>
+		</div>
+		<img id="bg-img" class="bg-img" src="">
+		<div id="char-info-container" class="container char-info" hidden>
+			<div class="row">
+				<div class="col-sm shadow">
+					<h3><a id="char-wiki" href="" target="_blank">Wiki page</a></h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<table id="char-players" class="sort-table" data-sort="num,text,,num,num,num,num,num">
+						<thead>
+							<tr>
+								<th><a>Rank</a></th>
+								<th><a>Player</a></th>
+								<th class="d-none d-md-table-cell"></th>
+								<th><a>Games</a></th>
+								<th><a>Wins</a></th>
+								<th class="d-none d-sm-table-cell"><a>Losses</a></th>
+								<th class="d-none d-sm-table-cell"><a>Draws</a></th>
+								<th><a>Winrate</a></th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

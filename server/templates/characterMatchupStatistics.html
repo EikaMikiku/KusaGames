@@ -1,0 +1,42 @@
+<div class="container ms-text-center">
+	<button onclick="location.href='?chars=1'">Character list</button>
+	<p><%=character ? character.name : "Unknown Character"%> matchup list:</p>
+</div>
+
+<div class="container">
+	<table class="ms-table sort-table" data-sort="num,text,,num,num,num,num,num">
+		<thead>
+			<tr>
+				<th><a>Rank</a></th>
+				<th><a>Character</a></th>
+				<th class="d-none d-md-table-cell"></th>
+				<th><a>Games</a></th>
+				<th><a>Wins</a></th>
+				<th class="d-none d-sm-table-cell"><a>Losses</a></th>
+				<th class="d-none d-sm-table-cell"><a>Draws</a></th>
+				<th><a>Winrate</a></th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			let result = server.statisticsManager.getCharacterMatchupStats(character ? character.id : "");
+			for(let i = 0; i < result.length; i++) {
+				%>
+				<tr>
+				<td><%=i + 1%></td>
+				<td>vs <%=result[i].name%></td>
+				<td class="d-none d-md-table-cell">
+					<a target="_blank" href="/?p1char=<%=character.id%>&p2char=<%=result[i].id%>">View games</a>
+				</td>
+				<td><%=result[i].total%></td>
+				<td><%=result[i].wins%></td>
+				<td class="d-none d-sm-table-cell"><%=result[i].losses%></td>
+				<td class="d-none d-sm-table-cell"><%=result[i].draws%></td>
+				<td><%=(100 * result[i].winrate).toFixed(2)%>&percnt;</td>
+				</tr>
+				<%
+			}
+			%>
+		</tbody>
+	</table>
+</div>

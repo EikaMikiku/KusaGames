@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<%=server.templateManager.renderTemplate("head.html", {
+		title: "Kusa.Games: Landing page",
+		description: "Page to search for matches."
+	})%>
+	<script defer src="js/index.js"></script>
+	<body>
+		<%=server.templateManager.renderTemplate("menu.html")%>
+		<%
+		let playerNames = server.statisticsManager.getPlayerNames();
+		let videoTags = server.statisticsManager.getVideoTags();
+		%>
+		<div class="container">
+			<div class="ms-content">
+				<hgroup class="ms-text-center py-4">
+					<h2 class="shadow">Welcome to Kusa.Games!</h1>
+					<h5 class="shadow">A place where you can search and add Kusa games!</h5>
+				</hgroup>
+				<form method="GET" id="form">
+					<input type="hidden" id="page" name="page" value="1">
+					<div class="row">
+						<div class="col-sm">
+							<div class="ms-form-group">
+								<label><b>PLAYER 1</b></label>
+								<span class="select">
+									<select id="p1char" name="p1char">
+										<option value="">Select character</option>
+										<%
+										for(let char in server.charMap) {
+											%>
+											<option value="<%=char%>"><%=server.charMap[char].name%></option>
+											<%
+										}
+										%>
+									</select>
+								</span>
+							</div>
+							<div class="ms-form-group">
+								<input id="p1name" name="p1name" placeholder="Player name" list="p1name-list">
+								<datalist id="p1name-list">
+									<%
+										for(let name of playerNames) {
+											print("<option value='" + name + "'>");
+										}
+									%>
+								</datalist>
+							</div>
+						</div>
+						<div class="col-sm">
+							<div class="ms-form-group">
+								<label><b>MATCH DETAILS</b></label>
+								<span class="select">
+									<select id="winner" name="winner">
+										<option value="">Select winner</option>
+										<option value="1">Player 1</option>
+										<option value="2">Player 2</option>
+										<option value="D">Draw</option>
+									</select>
+								</span>
+							</div>
+							<div class="ms-form-group">
+								<span class="select">
+									<select id="net" name="net">
+										<option value="">Locals and Netplay</option>
+										<option value="L">Locals only</option>
+										<option value="N">Netplay only</option>
+									</select>
+								</span>
+							</div>
+						</div>
+						<div class="col-sm">
+							<div class="ms-form-group">
+								<label><b>PLAYER 2</b></label>
+								<span class="select">
+									<select id="p2char" name="p2char">
+										<option value="">Select character</option>
+										<%
+										for(let char in server.charMap) {
+											%>
+											<option value="<%=char%>"><%=server.charMap[char].name%></option>
+											<%
+										}
+										%>
+									</select>
+								</span>
+							</div>
+							<div class="ms-form-group">
+								<input id="p2name" name="p2name" placeholder="Player name" list="p2name-list">
+								<datalist id="p2name-list">
+									<%
+										for(let name of playerNames) {
+											print("<option value='" + name + "'>");
+										}
+									%>
+								</datalist>
+							</div>
+						</div>
+						<div class="col-sm">
+							<div class="ms-form-group">
+								<label><b>VIDEO DETAILS</b></label>
+								<input id="videoTag" name="tag" type="text" placeholder="Tag search" list="tag-list">
+								<datalist id="tag-list">
+									<%
+										for(let tag of videoTags) {
+											print("<option value='" + tag + "'>");
+										}
+									%>
+								</datalist>
+							</div>
+							<div class="ms-form-group">
+								<input id="videoId" name="vid" placeholder="YouTube video ID">
+							</div>
+						</div>
+					</div>
+					<div class="row justify-content-center">
+						<div class="col-4">
+							<button id="search-button" type="button" class="ms-btn ms-info ms-fullwidth ms-medium">Search</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="container">
+			<%
+			let matches = search && search.matches;
+			if(!matches) {
+			%>
+				<h2 class="ms-text-center py-4 shadow">Do a search!</h2>	
+			<%
+			} else if(matches.length === 0) {
+			%>
+				<h2 class="ms-text-center py-4 shadow">No results.</h2>
+			<%
+			} else {
+			%>
+			<%=server.templateManager.renderTemplate("pagination.html", {
+				search
+			})%>
+			<table class="result-table ms-table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th class="d-none d-sm-table-cell">Date</th>
+						<th>Matchup details</th>
+						<th>Link</th>
+						<th class="d-none d-md-table-cell">Tags</th>
+						<th class="d-none d-lg-table-cell">Report</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
+					let currentVideo = matches[0].videoData.id;
+					for(let match of matches) {
+						if(match.videoData.id !== currentVideo) {
+							%>
+							<tr>
+								<td colspan="999" class="py-1 video-separator"></td>
+							</tr>
+							<%
+							currentVideo = match.videoData.id; 
+						}
+						print(server.templateManager.renderTemplate("match_row.html", {
+							match
+						}));
+					}
+					%>
+				</tbody>
+			</table>
+			<%=server.templateManager.renderTemplate("pagination.html", {
+				search
+			})%>
+			<%
+			}
+			%>
+		</div>
+	</body>
+</html>

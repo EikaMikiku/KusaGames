@@ -1,0 +1,42 @@
+<tr>
+	<td><%=match.orderIndex%></td>
+	<td class="matchup">
+		<div>
+			<div class="player-1 <%=match.winner==1||match.winner=="D"?'winner':''%>">
+				<img class="d-sm-img" src="img/chars/<%=match.p1char%>.png" data-char="<%=match.p1char%>">
+				<span><%=match.p1name%></span>
+			</div>
+			<span class="versus"></span>
+			<div class="player-2 <%=match.winner==2||match.winner=="D"?'winner':''%>">
+				<img class="d-sm-img" src="img/chars/<%=match.p2char%>.png" data-char="<%=match.p2char%>">
+				<span><%=match.p2name%></span>
+			</div>
+		</div>
+	</td>
+	<td>
+		<a class="goto-button" data-time="<%=match.time%>">Go to <%=match.readableTime%></a>
+	</td>
+	<td>
+		<a class="edit-button" 
+			data-seek="1"
+			data-idx="<%=match.orderIndex%>" 
+			data-p1char="<%=match.p1char%>" 
+			data-p2char="<%=match.p2char%>" 
+			data-p1name="<%=match.p1name%>" 
+			data-p2name="<%=match.p2name%>" 
+			data-winner="<%=match.winner%>" 
+			data-time="<%=match.time%>">Edit and seek</a>
+		<br>
+		<a class="edit-button" 
+			data-idx="<%=match.orderIndex%>" 
+			data-p1char="<%=match.p1char%>" 
+			data-p2char="<%=match.p2char%>" 
+			data-p1name="<%=match.p1name%>" 
+			data-p2name="<%=match.p2name%>" 
+			data-winner="<%=match.winner%>" 
+			data-time="<%=match.time%>">Edit only</a>
+	</td>
+	<td>
+		<button class="delete-button" data-time="<%=match.time%>">Delete</button>
+	</td>
+</tr>

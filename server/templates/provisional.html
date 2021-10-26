@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<%=server.templateManager.renderTemplate("head.html", {
+		title: "Kusa.Games: Provisional videos list",
+		description: "List of provisional videos to be approved."
+	})%>
+	<body>
+		<%=server.templateManager.renderTemplate("menu.html")%>
+
+		<div class="container ms-text-center">
+			Here is the table of the provisional videos added by people without a token.
+			<br>
+			Instead of adding something, it will be faster to approve/adjust an existing video.
+			<br>
+			If you spot same IP address consistently adding matches and with good quality, maybe they should get a token? Let Eika know.
+		</div>
+		<div class="container">
+			<%
+			let arr = [];
+			for(let video in server.games) {
+				if(!server.games[video].provIP) continue;
+				arr.push(server.games[video]);
+			}
+
+			arr.sort((a, b) => {
+				let ad = new Date(a.date).getTime();
+				let bd = new Date(b.date).getTime();
+				return bd - ad;
+			});
+			%>
+			<table>
+				<thead>
+					<th>Video ID</th>
+					<th>Date</th>
+					<th>Tags</th>
+					<th>Who added it</th>
+					<th>Match count</th>
+					<th>Approve</th>
+					<th>Delete</th>
+				</thead>
+				<tbody>
+					<%
+					for(let data of arr) {
+					%>
+					<tr>
+						<td><a target="_blank" href="/editor?videoId=<%=data.id%>"><%=data.id%></a></td>
+						<td><%=data.date%></td>
+						<td>
+							<%
+							for(let tag of data.tags) {
+								%>
+								<span class="tag"><%=tag%></span>
+								<%
+							}
+							%>
+						</td>
+						<td><%=data.provIP%></td>
+						<td><%=data.matches.length%></td>
+						<td><button class="ms-success" onclick="approve('<%=data.id%>');">Approve</button></td>
+						<td><button class="ms-danger" onclick="del('<%=data.id%>');">Delete</button></td>
+					</tr>					
+					<%
+					}
+					%>
+				</tbody>
+			</table>
+		</div>
+	</body>
+	<script>
+		function approve(vid) {
+			if(confirm("You better bet sure! Are you sure?")) {
+				fetch("/approveVideo", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({vid})
+				}).then(r => {
+					if(r.status !== 200) {
+						r.text().then(alert);
+					} else {
+						window.location.reload();
+					}
+				});
+			}
+		}
+		function del(vid) {
+			if(confirm("You better bet sure! Are you sure?") && confirm("Are you REALLY sure? Maybe match contents are salvageable?")) {
+				fetch("/deleteProvVideo", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({vid})
+				}).then(r => {
+					if(r.status !== 200) {
+						r.text().then(alert);
+					} else {
+						window.location.reload();
+					}
+				});
+			}
+		}
+	</script>
+</html>

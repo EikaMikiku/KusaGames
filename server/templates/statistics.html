@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<%=server.templateManager.renderTemplate("head.html", {
+		title: "Kusa.Games: Statistics page",
+		description: "Various statistics for matches, characters and players."
+	})%>
+	<script src="/js/tableSort.js"></script>
+	<body>
+		<%
+		print(server.templateManager.renderTemplate("menu.html"));
+
+		if(type === "all-players") {
+			print(server.templateManager.renderTemplate("allPlayerStatistics.html"));
+		} else if(type === "chars") {
+			print(server.templateManager.renderTemplate("characterStatistics.html"));
+		} else if(type === "player") {
+			print(server.templateManager.renderTemplate("playerStatistics.html", {
+				player
+			}));
+		} else if(type === "matchup") {
+			print(server.templateManager.renderTemplate("characterMatchupStatistics.html", {
+				character
+			}));
+		}
+		%>
+	</body>
+</html>

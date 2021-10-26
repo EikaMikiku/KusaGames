@@ -1,0 +1,31 @@
+<tr>
+	<td><%=match.orderIndex%></td>
+	<td class="matchup">
+		<div>
+			<div class="player-1 <%=match.winner==1||match.winner=="D"?'winner':''%>">
+				<img class="d-sm-img" src="img/chars/<%=match.p1char%>.png" data-char="<%=server.charMap[match.p1char].name%>">
+				<span><%=match.p1name%></span>
+			</div>
+			<span class="versus"></span>
+			<div class="player-2 <%=match.winner==2||match.winner=="D"?'winner':''%>">
+				<img class="d-sm-img" src="img/chars/<%=match.p2char%>.png" data-char="<%=server.charMap[match.p2char].name%>">
+				<span><%=match.p2name%></span>
+			</div>
+		</div>
+	</td>
+	<td>
+		<a target="_blank" href="https://youtu.be/<%=match.videoData.id%>?t=<%=match.time%>">
+			<span class="nowrap">@ <%=match.readableTime%></span>
+		</a>
+	</td>
+	<td class="d-none d-md-table-cell">
+		<%
+		var tags = match.videoData.tags;
+		for(let tag of tags) {
+			%>
+			<span class="tag"><%=tag%></span>
+			<%
+		}
+		%>
+	</td>
+</tr>
