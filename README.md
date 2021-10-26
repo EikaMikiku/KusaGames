@@ -1,6 +1,7 @@
 # KusaGames
 A base website suite for gaming match database.\
-Designed for 1v1 matches, but you could fork and amend it for any competition.
+Designed for 1v1 matches, but you could fork and amend it for any competition.\
+KusaGames in action: http://mbaacc.melty.games/ and http://lumina.melty.games/
 
 ## How to run
 
