@@ -133,7 +133,10 @@ StatisticsManager.prototype.getPlayerStats = function() {
 		return diff !== 0 ? diff : a.localeCompare(b);
 	});
 
-	names.splice(names.indexOf(""), 1); //Remove no name
+	let noNameIdx = names.indexOf("");
+	if(noNameIdx >= 0) {
+		names.splice(noNameIdx, 1); //Remove no name
+	}
 
 	//Re-map array to objects + add names
 	return names.map(name => {
