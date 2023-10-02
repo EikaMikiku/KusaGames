@@ -31,7 +31,8 @@ StatisticsManager.prototype.getCharacterPlayerStats = function(char) {
 				}
 				c.total++;
 				players[match.p1name] = c;
-			} else if(match.p2name.length > 0 && match.p2char === char) {
+			}
+			if(match.p2name.length > 0 && match.p2char === char) {
 				c = players[match.p2name] || {
 					total: 0,
 					wins: 0,
@@ -170,7 +171,8 @@ StatisticsManager.prototype.getCharacterMatchupStats = function(cname) {
 				}
 				c.total++;
 				chars[match.p2char] = c;
-			} else if(match.p2char === cname) {
+			}
+			if(match.p2char === cname) {
 				c = chars[match.p1char] || {
 					total: 0,
 					wins: 0,
